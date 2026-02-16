@@ -14,36 +14,76 @@
             --border: #30363d;
         }
 
-        body { font-family: 'Times New Roman', serif; background: var(--bg-light); margin: 0; padding: 0; color: #333; overflow-x: hidden; }
+        /* Essential Scroll Fix */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
 
-        /* MATH FRONT */
-        #math-page { padding: 50px 20px; text-align: center; display: block; }
-        .math-container { max-width: 650px; margin: auto; background: white; border: 1px solid #ccc; padding: 40px; box-shadow: 8px 8px 0px #eee; }
-        .math-input { padding: 12px; width: 80%; margin-bottom: 20px; border: 1px solid #aaa; font-family: monospace; }
-        .solve-btn { background: #f0f0f0; border: 1px solid #999; padding: 10px 40px; cursor: pointer; font-size: 1rem; font-weight: bold; }
+        body { font-family: 'Times New Roman', serif; background: var(--bg-light); color: #333; }
 
-        /* SQUARE GALLERY */
+        /* MATH FRONT PAGE */
+        #math-page { 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .math-container { 
+            max-width: 600px; 
+            background: white; 
+            border: 1px solid #ccc; 
+            padding: 40px; 
+            box-shadow: 8px 8px 0px #eee; 
+        }
+        .math-input { padding: 12px; width: 80%; margin-bottom: 20px; border: 1px solid #aaa; }
+        .solve-btn { background: #f0f0f0; border: 1px solid #999; padding: 10px 40px; cursor: pointer; font-weight: bold; }
+
+        /* THE SECRET GALLERY - SCROLLABLE */
         #game-gallery {
             display: none; 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--game-bg); color: white; overflow-y: auto; z-index: 100;
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%;
+            background: var(--game-bg); 
+            color: white; 
+            z-index: 100;
+            overflow-y: auto; /* THIS ENABLES SCROLLING */
+            -webkit-overflow-scrolling: touch;
         }
-        .gallery-header { padding: 20px; text-align: center; border-bottom: 1px solid var(--border); background: var(--card); }
+
+        .gallery-header { 
+            position: sticky; /* Keeps the header at the top while you scroll */
+            top: 0;
+            padding: 20px; 
+            text-align: center; 
+            border-bottom: 1px solid var(--border); 
+            background: var(--card); 
+            z-index: 101;
+        }
+
         .grid {
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
-            gap: 15px; max-width: 1200px; margin: 30px auto; padding: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            gap: 20px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 30px 20px 100px 20px; /* Extra bottom padding for scroll space */
         }
+
         .square {
             background: var(--card); border: 1px solid var(--border); aspect-ratio: 1/1;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             border-radius: 12px; cursor: pointer; transition: 0.2s; overflow: hidden;
         }
-        .square:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 5px 15px rgba(88,166,255,0.2); }
-        .square img { width: 100%; height: 70%; object-fit: cover; border-bottom: 1px solid var(--border); }
-        .square h3 { margin: 8px 0; font-size: 0.85rem; color: #c9d1d9; font-family: sans-serif; }
+        .square:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .square img { width: 100%; height: 75%; object-fit: cover; border-bottom: 1px solid var(--border); }
+        .square h3 { margin: 5px 0; font-size: 0.9rem; color: #c9d1d9; font-family: sans-serif; }
 
-        /* GAME PLAYER */
+        /* FULLSCREEN OVERLAY */
         #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; display: none; z-index: 200; }
         iframe { width: 100%; height: 100%; border: none; }
         .panic-btn { position: absolute; top: 10px; right: 10px; background: #ff4444; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 5px; z-index: 201; font-weight: bold; }
@@ -54,7 +94,7 @@
     <div id="math-page">
         <div class="math-container">
             <h1 style="color: var(--math-blue);">Unit 4: Advanced Calculus</h1>
-            <p>Verification Portal for Student ID: Y10-4492-B</p>
+            <p>Verification Portal: Year 10 Mathematics</p>
             <input type="text" class="math-input" placeholder="y = mx + b">
             <br>
             <button class="solve-btn" onclick="openGallery()">Solve & Verify</button>
@@ -63,8 +103,8 @@
 
     <div id="game-gallery">
         <div class="gallery-header">
-            <button onclick="closeGallery()" style="background: #333; color: white; border: none; padding: 8px 15px; cursor: pointer; float: left; border-radius: 4px;">← Exit</button>
-            <h2 style="margin: 0; display: inline-block; font-family: sans-serif;">Research Modules</h2>
+            <button onclick="closeGallery()" style="background: #333; color: white; border: none; padding: 8px 15px; cursor: pointer; float: left; border-radius: 4px;">← Back</button>
+            <h2 style="margin: 0; display: inline-block; font-family: sans-serif;">Research Archive</h2>
         </div>
         <div class="grid">
             <div class="square" onclick="play('https://play2048.co/')"><img src="https://picsum.photos/seed/2048/200"><h3>2048</h3></div>
@@ -74,7 +114,6 @@
             <div class="square" onclick="play('https://classic.minecraft.net/')"><img src="https://picsum.photos/seed/mc/200"><h3>Minecraft</h3></div>
             <div class="square" onclick="play('https://v6p9d9t4.ssl.hwcdn.net/html/1453/index.html')"><img src="https://picsum.photos/seed/slope/200"><h3>Slope</h3></div>
             <div class="square" onclick="play('https://chvin.github.io/react-tetris/')"><img src="https://picsum.photos/seed/tetris/200"><h3>Tetris</h3></div>
-            
             <div class="square" onclick="play('https://ubg77.github.io/edit/gunspin/')"><img src="https://picsum.photos/seed/gun/200"><h3>Gunspin</h3></div>
             <div class="square" onclick="play('https://ovogame.github.io/')"><img src="https://picsum.photos/seed/ovo/200"><h3>OvO</h3></div>
             <div class="square" onclick="play('https://1v1.lol/')"><img src="https://picsum.photos/seed/1v1/200"><h3>1v1.LOL</h3></div>
@@ -87,6 +126,9 @@
             <div class="square" onclick="play('https://3kh0.github.io/projects/tiny-fishing/')"><img src="https://picsum.photos/seed/fish/200"><h3>Tiny Fishing</h3></div>
             <div class="square" onclick="play('https://3kh0.github.io/projects/geometry-dash/')"><img src="https://picsum.photos/seed/dash/200"><h3>Geo Dash</h3></div>
             <div class="square" onclick="play('https://3kh0.github.io/projects/paper-io-2/')"><img src="https://picsum.photos/seed/paper/200"><h3>Paper.io 2</h3></div>
+            <div class="square" onclick="play('https://3kh0.github.io/projects/drive-mad/')"><img src="https://picsum.photos/seed/drive/200"><h3>Drive Mad</h3></div>
+            <div class="square" onclick="play('https://3kh0.github.io/projects/cluster-rush/')"><img src="https://picsum.photos/seed/truck/200"><h3>Cluster Rush</h3></div>
+            <div class="square" onclick="play('https://3kh0.github.io/projects/tunnel-rush/')"><img src="https://picsum.photos/seed/tunnel/200"><h3>Tunnel Rush</h3></div>
         </div>
     </div>
 
@@ -96,8 +138,14 @@
     </div>
 
     <script>
-        function openGallery() { document.getElementById('game-gallery').style.display = 'block'; }
-        function closeGallery() { document.getElementById('game-gallery').style.display = 'none'; }
+        function openGallery() { 
+            document.getElementById('game-gallery').style.display = 'block'; 
+            document.body.style.overflow = 'hidden'; // Prevents math page from scrolling while gallery is open
+        }
+        function closeGallery() { 
+            document.getElementById('game-gallery').style.display = 'none'; 
+            document.body.style.overflow = 'auto'; 
+        }
         function play(url) {
             document.getElementById('game-frame').src = url;
             document.getElementById('overlay').style.display = 'block';
@@ -106,6 +154,7 @@
             document.getElementById('game-frame').src = '';
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('game-gallery').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
         window.addEventListener('keydown', function(e) { if (e.key === "Escape") { panic(); } });
     </script>
